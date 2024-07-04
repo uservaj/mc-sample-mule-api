@@ -9,13 +9,10 @@ on:
       - qa
 
 jobs:
-
-
-  # Job to deploy the application on anypoint platform's Runtime manager
-  call-cicd-workflow:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Call CI/CD Workflow
-        uses: uservaj/mc-cicd-org-template/.github/workflows/main.yml@main
-        with:
-          environment: ${{ github.ref_name }}
+    # Job to deploy the application on anypoint platform's Runtime manager
+    
+  call-cicd-workflow: # call cicd main flow
+    uses: uservaj/mc-cicd-org-template/.github/workflows/deploy-workflow.yml@main
+    with:
+      environment: ${{ github.ref_name }}
+    secrets: inherit
