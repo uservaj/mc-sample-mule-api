@@ -1,0 +1,12 @@
+name: Reference to workflow files necessary to handle deployment of Mule Applciation
+
+on:
+  push:
+    branches: ["main", "dev", "uat", "qa"]
+  pull_request:
+    branches: ["main", "dev", "uat", "qa"]
+
+jobs:
+  Mule-Deploy:
+    uses: uservaj/mc-sample-mule-api/.github/workflows/main.yml@main
+    secrets: inherit
