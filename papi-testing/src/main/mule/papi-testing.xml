@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:mc-sf-patient-sapi="http://www.mulesoft.org/schema/mule/mc-sf-patient-sapi"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd 
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/mc-sf-patient-sapi http://www.mulesoft.org/schema/mule/mc-sf-patient-sapi/current/mule-mc-sf-patient-sapi.xsd">
+	<http:listener-config name="HTTP_Listener_config" doc:name="HTTP Listener config" doc:id="6e07b08d-3bb4-4733-8102-b1b49b4a8d08" >
+		<http:listener-connection host="0.0.0.0" port="8081" />
+	</http:listener-config>
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="4d4d0b00-4a4a-4279-b619-1bac18503b05" />
+	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="2ff7555f-1160-478b-8e3b-fc2db8ea3cc1" >
+		<salesforce:basic-connection username="randy1216@mulecraft.in" password="Randy@12" securityToken="eFz1HFTfFKM5BKT4LjSMzxdo" url="https://login.salesforce.com/services/Soap/u/43.0" />
+	</salesforce:sfdc-config>
+	<mc-sf-patient-sapi:config name="Mc_sf_patient_sapi_Config" doc:name="Mc-sf-patient-sapi Config" doc:id="559d6fd7-be0e-4b8a-88a9-4e5eefe3ffa7" property_host="wed" property_port="wedw" property_basePath="/wed" property_protocol="http" property_client-id="ewrf3f243r32f243f" property_client-secret="234r234r234f3423" />
+	<flow name="mc-patient-data-sync-appFlow6" doc:id="2463e442-c8da-4227-a442-a405a819e3a5" >
+		<http:listener doc:name="Listener" doc:id="52e4b2b4-ab0c-4430-a688-696040fe57b7" config-ref="HTTP_Listener_config" path="/bestPractice"/>
+		<logger level="INFO" doc:name="Start Flow" doc:id="57a27bb0-21c3-497f-b9d4-aa032123ead5" message='#["Flow started in " ++ flow.name ++ "\nCorrelationID: " ++ correlationId]'/>
+		<http:request method="GET" doc:name="Request" doc:id="5a77ab6a-f769-48e5-979b-8e5938c8c6b9" config-ref="HTTP_Request_configuration" url="https://data.covid19india.org/csv/latest/raw_data1.csv"/>
+		<ee:transform doc:name="Transform Message" doc:id="3f97079a-a609-4fe7-b23b-993078e71ad3" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+    "entryID__c": $.Entry_ID,
+    "statePatientNumber__c": $."Patient Number",
+    "DateAnnounced__c": $."Date Announced",
+    "EstimatedOnsetDate__c": $."Estimated Onset Date",
+    "Age_Bracket__c": $."Age Bracket",
+    "Gender__c": $.Gender,
+    "Detected_City__c": $."Detected City",
+    "Detected_District__c": $."Detected District",
+    "Detected_State__c": $."Detected State",
+    "State_Code__c": $."State code",
+    "Current_Status__c": $."Current Status",
+    "Notes__c": $.Notes,
+    "Contracted_from_which_Patient__c": $."Contracted from which Patient (Suspected)",
+    "Nationality__c": $.Nationality,
+    "Type_of_Transmission__c": $."Type of transmission",
+    "Status_Change_Date__c": $."Status Change Date",
+    "Source_1__c": $.Source_1,
+    "Source_2__c": $.Source_2,
+    "Source_3__c": $.Source_3,
+    "Backup_Notes__c": $."Backup Notes",
+    "Num_Cases__c": $."Num Cases"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<foreach doc:name="For Each" doc:id="9f235418-0046-4588-8bc1-238efe4a1da1" batchSize="199" collection="payload">
+			<salesforce:create doc:name="Create" doc:id="a81b21e2-7e97-4f6b-b816-cd1349094d0c" config-ref="Salesforce_Config" type="PatientDetail__c" />
+		</foreach>
+		<ee:transform doc:name="Transform Message" doc:id="d85be0e0-82c9-434d-832c-0b056137ef55" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	"msg": "success",
+	"Message": "Jeichutom Maara."
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="End Flow" doc:id="9fd4b14f-1507-4f8a-867d-fadb96355dfb" message='#["Flow Ended in " ++ flow.name ++ "\nCorrelationID: " ++ correlationId ++ "\nTime: " ++ now()]'/>
+	</flow>	
+	<flow name="pocFlow1" doc:id="318487b6-b90f-425a-baec-dd448543f4d7" >
+		<scheduler doc:name="Scheduler" doc:id="b3a9541f-dbfa-4ab1-b892-d07ae51964eb" >
+			<scheduling-strategy >
+				<fixed-frequency />
+			</scheduling-strategy>
+		</scheduler>
+		<set-variable value="#[['https://data.covid19india.org/csv/latest/raw_data1.csv',&#10; 'https://data.covid19india.org/csv/latest/raw_data2.csv',&#10; 'https://data.covid19india.org/csv/latest/raw_data3.csv'&#10;]]" doc:name="Set Variable" doc:id="0f97995f-8ef2-4866-b540-d9a2498cbb3b" variableName="url"/>
+		<foreach doc:name="For Each" doc:id="0487f718-37ea-45c7-9cee-99e4cc490308" collection="#[vars.url]">
+			<http:request method="GET" doc:name="Request" doc:id="31e777bf-5924-4fe5-a7ae-c6ae9db20361" url="#[payload]"/>
+			<ee:transform doc:name="Transform Message" doc:id="96aa969f-69eb-4807-a381-8dd2af928a4d" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/java
+---
+payload map {
+    "entryID__c": $.Entry_ID,
+    "statePatientNumber__c": $."Patient Number",
+    "DateAnnounced__c": $."Date Announced",
+    "EstimatedOnsetDate__c": $."Estimated Onset Date",
+    "Age_Bracket__c": $."Age Bracket",
+    "Gender__c": $.Gender,
+    "Detected_City__c": $."Detected City",
+    "Detected_District__c": $."Detected District",
+    "Detected_State__c": $."Detected State",
+    "State_Code__c": $."State code",
+    "Current_Status__c": $."Current Status",
+    "Notes__c": $.Notes,
+    "Contracted_from_which_Patient__c": $."Contracted from which Patient (Suspected)",
+    "Nationality__c": $.Nationality,
+    "Type_of_Transmission__c": $."Type of transmission",
+    "Status_Change_Date__c": $."Status Change Date",
+    "Source_1__c": $.Source_1,
+    "Source_2__c": $.Source_2,
+    "Source_3__c": $.Source_3,
+    "Backup_Notes__c": $."Backup Notes",
+    "Num_Cases__c": $."Num Cases"
+}]]></ee:set-payload>
+				</ee:message>
+			</ee:transform>
+			<foreach doc:name="For Each" doc:id="d2206c51-7263-4427-ac08-88a6d49d253a" batchSize="199">
+				<salesforce:create doc:name="Create" doc:id="a3d92d63-f5d9-4be3-a0fc-f772999dff30" config-ref="Salesforce_Config" type="PatientDetail__c" />
+			</foreach>
+		</foreach>
+		<logger level="INFO" doc:name="Logger" doc:id="3307ff31-927a-4b5a-96d7-b832208165be" />
+	</flow>
+
+</mule>

@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ 
+<mule xmlns:tracking="http://www.mulesoft.org/schema/mule/ee/tracking" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd
+http://www.mulesoft.org/schema/mule/ee/tracking http://www.mulesoft.org/schema/mule/ee/tracking/current/mule-tracking-ee.xsd">
+	<error-handler doc:id="4f727919-29eb-4234-b450-1765fcc8543d" name="global-error-handler">
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="25c434ef-a89e-4d04-917f-300e738e2642" type="APIKIT:BAD_REQUEST">
+			<set-variable value="400" doc:name="Set Http Status" doc:id="77ee71dc-27d4-4278-95ef-a7029b3e8f01" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="a1ea2a19-9ffd-4ddc-b4ca-b775b2daedb7" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c238f441-095a-4f10-a59c-ed2147196851" type="APIKIT:NOT_FOUND">
+			<set-variable value="404" doc:name="Set Http Status" doc:id="a5285fea-27a0-4411-b3ae-fab8c5703251" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="d5975ce5-75e7-4784-842d-795c4f3cb78b" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="cf136404-3b8c-404a-8930-404ed46917f5" type="APIKIT:METHOD_NOT_ALLOWED">
+			<set-variable value="405" doc:name="Set Http Status" doc:id="1944c08d-992d-41e3-b5eb-8efa70ca925c" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="6b9f24d7-8b84-4c99-b09d-586d27a51c4f" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="94994274-ded1-46c4-a85a-586be02ce894" type="APIKIT:NOT_ACCEPTABLE">
+			<set-variable value="406" doc:name="Set Http Status" doc:id="bec56880-06af-43b2-8e72-7898cd19199d" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="e22af72d-4695-41e0-975f-21a4b1c4aa7b" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7f5acbc2-5d82-475c-ae4f-fa0c8ec6cdee" type="APIKIT:UNSUPPORTED_MEDIA_TYPE">
+			<set-variable value="415" doc:name="Set Http Status" doc:id="36d78cfe-1108-4fa4-b3bb-133c47dcf0be" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="e16c3698-ad65-404d-b2f4-3051ebef78b1" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="3298ff5a-0987-44be-b896-cb906d5606e1" type="APIKIT:NOT_IMPLEMENTED">
+			<set-variable value="501" doc:name="Set Http Status" doc:id="9fd385b1-ddc6-4465-8972-52d13ddb018b" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="532d1a8a-7078-4aaf-8bed-a102795fb47a" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="da8516d4-d3ae-413a-b722-bd70b84475a4" type="HTTP:CONNECTIVITY">
+			<set-variable value="503" doc:name="Set Http Status" doc:id="f5550b32-6f4f-4d21-9031-edd7093d8088" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="8eab3575-b5f8-4962-8fde-d09cd4203338" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="700c51d3-7284-4a64-b7e7-dadeeb4b679e" type="HTTP:FORBIDDEN">
+			<set-variable value="403" doc:name="Set Http Status" doc:id="752a2725-7937-444a-bc6d-22a529985147" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="aadc382e-8e9f-4f61-af18-fef27612331c" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1333a304-8fd1-4fad-af0e-9c21dc5df3c7" type="HTTP:INTERNAL_SERVER_ERROR">
+			<set-variable value="500" doc:name="Set Http Status" doc:id="a94ccc39-c425-43b2-89ce-ca1e9a37dc1e" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="80b45ea5-6b1e-495f-bd48-43d6eeef3462" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d1dc143c-77b0-4471-94bc-d649f8370dd4" type="HTTP:TIMEOUT">
+			<set-variable value="408" doc:name="Set Http Status" doc:id="1675fd9b-0ec4-4abd-acc8-e4c80489432e" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="0255292a-1c25-427c-8560-081df479e365" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="47ca7c0c-b695-4925-8d4b-5fd8bf0ef888" type="HTTP:UNAUTHORIZED">
+			<set-variable value="401" doc:name="Set Http Status" doc:id="496e2fb6-ee2a-4df5-9ee1-e151e2154a0b" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="c8c443b6-ec32-45e0-a6d3-2661d7553413" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="1a6fda7f-3e2d-4523-bfab-10210bca1011" type="VALIDATION">
+			<set-variable value="403" doc:name="Set Http Status" doc:id="58daaf14-dc79-49eb-9ce4-83e70c6eaeed" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="0e7733bd-b818-4ef3-acd0-9a8c3cf1de8c" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7869bc6f-0b63-452e-b86c-0b7174e19f65" type="EXPRESSION">
+			<set-variable value="500" doc:name="Set Http Status" doc:id="a880e2f2-5885-4494-8535-7bde5b85ddef" variableName="httpStatus"/>
+			<flow-ref doc:name="common-error-sub-flow" doc:id="39f86804-cbca-47ee-8da6-6141f7694b30" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="474faa0e-5b6f-44e5-949f-d2245c87c63b" type="SALESFORCE:CONNECTIVITY">
+			<set-variable value="503" doc:name="Set Variable" doc:id="50f57042-a1c0-4aa3-8164-4fc1a0d672a3" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="e2aebfcf-5b0f-4eec-aade-834e4daa0b93" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="97fc7f69-e1e6-4bb3-8eeb-f922cfda2e1e" type="SALESFORCE:INVALID_INPUT">
+			<set-variable value="422" doc:name="Set Variable" doc:id="8e1c99c7-23b5-45f6-a576-8fcaf7e0724c" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="0137341b-b41d-4b32-922c-429b9df37f71" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7016a74c-78ee-4310-b5de-47cd839dbbdb" type="SALESFORCE:LIMIT_EXCEEDED">
+			<set-variable value="500" doc:name="Set Variable" doc:id="0e4c1d15-ae43-40c9-a867-90f017824fbf" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="3b4c32f5-472e-4530-bf2c-9144d2df8f27" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="a520ee09-a55a-4b4b-af75-7bcdf365d151" type="SALESFORCE:NOT_FOUND">
+			<set-variable value="404" doc:name="Set Variable" doc:id="9357d270-70b6-4b1b-816b-db8e82965565" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="70d3a192-e12e-4f86-a311-5068a0e46403" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="0ae89566-df1b-4e43-a8fc-c70625d4db94" type="SALESFORCE:RETRY_EXHAUSTED">
+			<set-variable value="449" doc:name="Set Variable" doc:id="7866011a-f3b2-4e4d-8c8f-405f79085105" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="1ab430d1-8333-4d0b-957f-162ade1a3772" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="f08eed2f-d6e7-419d-b718-7fe5fbc6e1e1" type="SALESFORCE:UNAVAILABLE">
+			<set-variable value="503" doc:name="Set Variable" doc:id="f1fa1597-b8c8-4089-b065-cc7084b4f352" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="104866e2-d5b6-4e83-9944-3902c31de369" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="c762c7d5-40c9-40fc-9c2c-64ed45bc4856" type="SALESFORCE:TIMEOUT">
+			<set-variable value="408" doc:name="Set Variable" doc:id="6a93dacb-3de7-4036-90b3-5ab7f859fa65" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="34066918-3a5f-4470-a325-6d039654ed89" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="7e8066f6-343e-43a3-adbf-c994e1d5f30d" type="SALESFORCE:OPERATION_NOT_SUPPORTED">
+			<set-variable value="501" doc:name="Set Variable" doc:id="23c77e50-910d-42b1-bfa8-c33f1c596c7c" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="8b57725c-f6ee-41b3-870c-09c3c900d0a2" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="9b9b1a56-9729-4e2c-bfac-1a50a1474329" type="SALESFORCE:COMMUNICATION">
+			<set-variable value="500" doc:name="Set Variable" doc:id="ce53f1e2-cb21-4551-b2d6-75b0b4983956" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="4a1d4abb-c1bd-4df6-845d-bf62bd09e2ed" name="common-error-sub-flow"/>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="6a609dab-34e0-4bae-aabc-e1f1cfe6c880" type="SALESFORCE:INSUFFICIENT_PERMISSIONS">
+			<set-variable value="507" doc:name="Set Variable" doc:id="9726e16b-d8a4-4b98-8ee5-fef690d201d0" variableName="httpStatus"/>
+			<flow-ref doc:name="Flow Reference" doc:id="b1fa0eff-c82e-4a5e-87f3-e36ccfb9f4ce" name="common-error-sub-flow"/>
+		</on-error-propagate>
+	
+</error-handler>
+	<sub-flow name="common-error-sub-flow" doc:id="8fd33053-edd2-4fb7-a2e4-473263b455db" >
+		<ee:transform doc:name="Error response" doc:id="08098996-35ab-4701-8745-4403ad798dc8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	successful: false,
+	correlationId: correlationId,
+	errorType: error.errorType.namespace,
+	errorResponse: error.errorType.identifier,
+	errorDescprtion: error.detailedDescription,
+	errorComponent: error.failingComponent
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+		<logger level="INFO" doc:name="Error Log" doc:id="315ec324-e558-4dc3-86d4-fb989389c305" message="Error message captured"/>
+	</sub-flow>
+</mule>
