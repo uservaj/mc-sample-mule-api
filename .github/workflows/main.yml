@@ -7,7 +7,7 @@ on:
       - dev
       - uat
       - qa
-
+      
 jobs:
     # Job to deploy the application on anypoint platform's Runtime manager
     
