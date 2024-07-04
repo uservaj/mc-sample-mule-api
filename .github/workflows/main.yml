@@ -12,7 +12,7 @@ jobs:
     # Job to deploy the application on anypoint platform's Runtime manager
     
   call-cicd-workflow: # call cicd main flow
-    uses: uservaj/mc-cicd-org-template/.github/workflows/deploy-workflow.yml@main
+    uses: uservaj/mc-cicd-org-template/.github/workflows/main.yml@main
     with:
       environment: ${{ github.ref_name }}
     secrets: inherit
