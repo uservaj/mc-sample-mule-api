@@ -8,5 +8,5 @@ on:
 
 jobs:
   Mule-Deploy:
-    uses: uservaj/mc-sample-mule-api/.github/workflows/main.yml@main
+    uses: uservaj/mc-sample-mule-api/.github/workflows/deploy-dev.yml@main
     secrets: inherit
