@@ -8,7 +8,6 @@
 	<packaging>mule-application</packaging>
 
 	<name>papi-testing</name>
-
 	
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
