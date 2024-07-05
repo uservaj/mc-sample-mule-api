@@ -15,4 +15,5 @@ jobs:
     uses: uservaj/mc-cicd-org-template/.github/workflows/main.yml@main
     with:
       environment: ${{ github.ref_name }}
+      secure_key: ${{secrets.secure_key}}
     secrets: inherit
